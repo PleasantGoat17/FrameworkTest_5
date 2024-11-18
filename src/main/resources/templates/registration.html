@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>用户注册</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2; /* 统一背景颜色 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px; /* 统一圆角 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px; /* 统一宽度 */
+        }
+        h1 {
+            text-align: center;
+            color: #333; /* 统一字体颜色 */
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555; /* 统一字体颜色 */
+            font-size: 14px;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%; /* 统一宽度 */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .error {
+            background-color: red;
+            color: white;
+            padding: 5px;
+            border-radius: 4px;
+            text-align: center;
+            margin-top: 15px;
+            width: 250px;
+            font-size: 14px;
+        }
+        .message {
+            background-color: green;
+            color: white;
+            padding: 5px;
+            border-radius: 4px;
+            text-align: center;
+            margin-top: 15px;
+            width: 250px;
+            font-size: 14px;
+        }
+
+
+    </style>
+    <script>
+        // 函数用于延迟跳转
+        function redirectToLogin() {
+            setTimeout(function() {
+                window.location.href = '/login'; // 登录页面的 URL
+            }, 3000); // 3 秒
+        }
+
+        // 检查是否有成功消息
+        window.onload = function() {
+            const messageElement = document.querySelector('.message');
+            if (messageElement) {
+                redirectToLogin();
+            }
+        };
+
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>用户注册</h1>
+
+
+    <form action="#" method="post" th:action="@{/register}">
+        <label for="username">用户名:</label>
+        <input id="username" name="username" required type="text">
+
+        <label for="password">密码:</label>
+        <input id="password" name="password" required type="password">
+
+        <label for="email">电子邮件:</label>
+        <input id="email" name="email" required type="email">
+
+        <button type="submit">注册</button>
+    </form>
+
+    <p>
+        已有账户？ <a th:href="@{/login}">登录</a>
+    </p>
+</div>
+</body>
+<div class="error" th:if="${error}">
+    <p th:text="${error}"></p>
+</div>
+<div class="message" th:if="${message}">
+    <p th:text="${message}"></p>
+</div>
+</html>

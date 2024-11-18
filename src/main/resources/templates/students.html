@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>学生管理系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            display: flex; /* 使用 Flexbox 布局 */
+            flex-direction: column; /* 垂直排列 */
+            align-items: center; /* 水平居中 */
+        }
+        h1 {
+            color: #333;
+        }
+        .header, .button-container {
+            width: 90%; /* 设置相同的宽度 */
+            max-width: 800px; /* 设置最大宽度 */
+            display: flex; /* 使用 Flexbox 布局 */
+            justify-content: space-between; /* 在横向上分散对齐 */
+            align-items: center; /* 垂直居中对齐 */
+            margin-bottom: 20px; /* 增加与表格的间距 */
+        }
+        .table-container {
+            max-height: 600px; /* 控制表格高度 */
+            overflow-y: auto; /* 允许垂直滚动 */
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%; /* 调整表格宽度 */
+            max-width: 800px; /* 设置最大宽度 */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px; /* 调整单元格内边距 */
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        /* 为每一列设置固定宽度 */
+        th:nth-child(1) { width: 20%; }
+        th:nth-child(2) { width: 30%; }
+        th:nth-child(3) { width: 15%; }
+        th:nth-child(4) { width: 35%; }
+
+        .new-button, .refresh-button, .export-button {
+            padding: 10px 15px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .new-button {
+            background-color: green; /* 新建按钮颜色为绿色 */
+        }
+        .new-button:hover {
+            background-color: darkgreen;
+        }
+        .refresh-button {
+            background-color: blue; /* 刷新按钮颜色为蓝色 */
+        }
+        .refresh-button:hover {
+            background-color: darkblue;
+        }
+        .export-button {
+            background-color: orange; /* 导出按钮颜色为黄色 */
+        }
+        .export-button:hover {
+            background-color: darkorange; /* 悬停时的颜色 */
+        }
+        .edit-button, .delete-button {
+            padding: 5px 10px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px; /* 按钮之间的间隔 */
+            text-decoration: none; /* 去掉下划线 */
+            font-size: 14px;
+        }
+        .edit-button {
+            background-color: orange;
+        }
+        .edit-button:hover {
+            background-color: darkorange;
+        }
+        .delete-button {
+            background-color: red;
+        }
+        .delete-button:hover {
+            background-color: darkred;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .pagination a {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .pagination a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>学生列表</h1>
+    <div>
+        <span th:text="${username}"></span>
+        <button class="logout-button" onclick="location.href='/login?logout';">注销</button>
+    </div>
+</div>
+
+<div class="button-container">
+    <button class="new-button" onclick="location.href='/students/new';">新建</button>
+    <button class="refresh-button" onclick="location.reload();">刷新</button>
+    <button class="export-button" onclick="location.href='/students/export';">导出</button> <!-- 导出按钮 -->
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+        <tr>
+            <th>姓名</th>
+            <th>邮箱</th>
+            <th>年龄</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.name}"></td>
+            <td th:text="${student.email}"></td>
+            <td th:text="${student.age}"></td>
+            <td style="text-align: right;"> <!-- 让操作按钮靠右对齐 -->
+                <a class="edit-button" th:href="@{/students/edit/{id}(id=${student.id})}">编辑</a>
+                <a onclick="return confirm('确定要删除吗?');" th:href="@{/students/delete/{id}(id=${student.id})}">
+                    <button class="delete-button">删除</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="pagination">
+    <a th:disabled="${currentPage == 0}" th:href="@{/students(page=${currentPage - 1})}"
+       th:if="${currentPage > 0}">上一页</a>
+    <a th:href="@{/students(page=${currentPage + 1})}" th:if="${currentPage + 1 < totalPages}">下一页</a>
+</div>
+</body>
+</html>
